@@ -23,13 +23,13 @@ app.on('ready', () => {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.show();
     mainWindow.focus();
+    if (process.env.NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+      // require('electron-react-devtools').inject(); // eslint-disable-line global-require
+    }
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.openDevTools();
-  }
 });

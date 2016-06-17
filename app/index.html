@@ -25,7 +25,7 @@
   </body>
 
   <script>
-  (function() {
+    (function() {
       const script = document.createElement('script');
       script.src = (process.env.HOT) ? 'http://localhost:3000/dist/bundle.js' : '../dist/bundle.js';
       document.write(script.outerHTML);

@@ -12,4 +12,6 @@ npm run dev
 ```
 You will have to reload the app after webpack is done compiling.
 
+See https://github.com/electron/electron/blob/master/docs/tutorial/devtools-extension.md for activating the react-dev-tools.
+
 This will allow for react-hot-loading in development.  `eslint` with the airbnb config is included to keep the coding style consistent throughout the app.  If there is a rule you don't agree with just update the `.eslintrc` file.

@@ -3,7 +3,7 @@ import ReactDom from 'react-dom';
 
 const App = () => (
   <div>
-    Testing
+    Testing!
   </div>
 );
 
