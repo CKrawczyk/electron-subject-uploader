@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactDom from 'react-dom';
+import '../css/main.styl';
 
 const App = () => (
-  <div>
+  <div className="app">
     Testing!
   </div>
 );
