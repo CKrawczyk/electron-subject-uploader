@@ -1,5 +1,9 @@
 /* eslint import/no-unresolved: 0 */
-import { app, BrowserWindow } from 'electron';
+const electron = require('electron');
+// Module to control application life.
+const app = electron.app;
+// Module to create native browser window.
+const BrowserWindow = electron.BrowserWindow;
 
 let mainWindow = null;
 
@@ -25,7 +29,6 @@ app.on('ready', () => {
     mainWindow.focus();
     if (process.env.NODE_ENV === 'development') {
       mainWindow.openDevTools();
-      // require('electron-react-devtools').inject(); // eslint-disable-line global-require
     }
   });
 
