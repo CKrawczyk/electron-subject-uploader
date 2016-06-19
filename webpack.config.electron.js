@@ -15,6 +15,7 @@ export default {
   },
 
   plugins: [
+    ...baseConfig.plugins,
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {

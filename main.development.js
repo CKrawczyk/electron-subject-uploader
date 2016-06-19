@@ -11,11 +11,7 @@ if (process.env.NODE_ENV === 'development') {
   require('electron-debug')(); // eslint-disable-line global-require
 }
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
-});
-
-app.on('ready', () => {
+function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
@@ -35,4 +31,16 @@ app.on('ready', () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+}
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('ready', createWindow);
+
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow();
+  }
 });
