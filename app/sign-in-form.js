@@ -2,8 +2,9 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { LoadingIndicator } from './loading-indicator';
 import auth from 'panoptes-client/lib/auth';
+import { withRouter } from 'react-router';
 
-export default class SignInForm extends React.Component {
+class SignInForm extends React.Component {
   constructor(props) {
     super(props);
 
@@ -16,7 +17,6 @@ export default class SignInForm extends React.Component {
       login: '',
       password: '',
       error: null,
-      signedIn: false,
     };
   }
 
@@ -29,48 +29,52 @@ export default class SignInForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({ working: true }, () => {
+    this.setState({ busy: true }, () => {
       const { login, password } = this.state;
       auth.signIn({ login, password })
         .then((user) => {
-          this.setState({ working: false, error: null, signedIn: true }, () => {
-            if (this.props.onSuccess) {
-              this.props.onSuccess(user);
+          this.setState({ busy: false, error: null, password: '' }, () => {
+            if (this.context.updateUser) {
+              this.context.updateUser(user);
+              this.props.router.push('/');
             }
           });
         })
         .catch((error) => {
-          this.setState({ working: false, error }, () => {
+          this.setState({ busy: false, error }, () => {
             ReactDom.findDOMNode(this).querySelector('[name="login"]').focus();
             if (this.props.onFailure) {
               this.props.onFailure(error);
             }
           });
         });
-      if (this.props.onSubmit) {
-        this.props.onSubmit(e);
-      }
     });
   }
 
   handleSignOut() {
     this.setState({ busy: true }, () => {
       auth.signOut().then(() => {
-        this.setState({ busy: false, password: '', signedIn: false });
+        this.setState({ busy: false, password: '' });
+        this.context.updateUser(null);
       });
     });
   }
 
   render() {
-    const disabled = this.state.busy;
+    const disabled = (this.context.user != null) || this.state.busy;
     let signOut;
     let signIn;
     let error;
     let busy;
-    if (this.state.signedIn) {
+    let user = {
+      login: undefined,
+      password: undefined,
+    };
+    if (this.context.user) {
+      user = this.context.user;
       signOut = (
         <div className="form-help">
-          Signed in as {this.state.login}{' '}
+          Signed in as {user.login}{' '}
           <button type="button" className="minor-button" onClick={this.handleSignOut}>Sign out</button>
         </div>
       );
@@ -108,7 +112,7 @@ export default class SignInForm extends React.Component {
             type="text"
             className="standard-input full"
             name="login"
-            vlaue={this.state.login}
+            vlaue={user.login}
             disabled={disabled}
             autoFocus
             onChange={this.handleInputChange}
@@ -121,7 +125,7 @@ export default class SignInForm extends React.Component {
             type="password"
             className="standard-input full"
             name="password"
-            value={this.state.password}
+            value={user.password}
             disabled={disabled}
             onChange={this.handleInputChange}
           />
@@ -142,4 +146,13 @@ SignInForm.propTypes = {
   onSuccess: React.PropTypes.func,
   onFailure: React.PropTypes.func,
   onSubmit: React.PropTypes.func,
+  user: React.PropTypes.object,
+  router: React.PropTypes.object,
 };
+
+SignInForm.contextTypes = {
+  updateUser: React.PropTypes.func,
+  user: React.PropTypes.object,
+};
+
+export default withRouter(SignInForm);

@@ -2,13 +2,12 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import '../css/main.styl';
 import apiClient from 'panoptes-client';
-import SignInForm from './sign-in-form';
+import routes from './routes';
+import { Router, hashHistory } from 'react-router';
 
 
 const App = () => (
-  <div className="app">
-    <SignInForm />
-  </div>
+  <Router history={hashHistory} routes={routes} />
 );
 
 // For console access:
