@@ -10,7 +10,6 @@ class SignInForm extends React.Component {
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSignOut = this.handleSignOut.bind(this);
 
     this.state = {
       busy: false,
@@ -51,38 +50,22 @@ class SignInForm extends React.Component {
     });
   }
 
-  handleSignOut() {
-    this.setState({ busy: true }, () => {
-      auth.signOut().then(() => {
-        this.setState({ busy: false, password: '' });
-        this.context.updateUser(null);
-      });
-    });
-  }
-
   render() {
     const disabled = (this.context.user != null) || this.state.busy;
-    let signOut;
     let signIn;
     let error;
-    let busy;
-    let user = {
-      login: undefined,
-      password: undefined,
-    };
-    if (this.context.user) {
-      user = this.context.user;
-      signOut = (
-        <div className="form-help">
-          Signed in as {user.login}{' '}
-          <button type="button" className="minor-button" onClick={this.handleSignOut}>Sign out</button>
-        </div>
-      );
+    let className = 'sign-in-form';
+    if (this.props.className) {
+      className = `${this.props.className} ${className}`;
+    }
+    const user = this.context.user || { login: undefined, password: undefined };
+    if (this.state.busy) {
+      signIn = <LoadingIndicator className="sign-in-form__submit" />;
     } else {
       signIn = (
         <button
           type="submit"
-          className="standard-button full"
+          className="standard-button sign-in-form__submit"
           disabled={disabled || this.state.login.length === 0 || this.state.password.length === 0}
         >
           Sign in
@@ -101,42 +84,30 @@ class SignInForm extends React.Component {
           {innerError}
         </div>
       );
-    } else if (this.state.busy) {
-      busy = <LoadingIndicator />;
     }
     return (
-      <form method="POST" onSubmit={this.handleSubmit}>
-        <label>
-          User name or Email Address
-          <input
-            type="text"
-            className="standard-input full"
-            name="login"
-            vlaue={user.login}
-            disabled={disabled}
-            autoFocus
-            onChange={this.handleInputChange}
-          />
-        </label>
-        <br />
-        <label>
-          Password
-          <input
-            type="password"
-            className="standard-input full"
-            name="password"
-            value={user.password}
-            disabled={disabled}
-            onChange={this.handleInputChange}
-          />
-        </label>
-        <br />
-        <div style={{ textAlign: 'center' }}>
-          {signIn}
-          {signOut}
-          {error}
-          {busy}
-        </div>
+      <form className={className} method="POST" onSubmit={this.handleSubmit}>
+        <input
+          type="text"
+          className="standard-input sign-in-form__username"
+          name="login"
+          vlaue={user.login}
+          disabled={disabled}
+          autoFocus
+          onChange={this.handleInputChange}
+          placeholder="User name or Email"
+        />
+        <input
+          type="password"
+          className="standard-input sign-in-form__password"
+          name="password"
+          value={user.password}
+          disabled={disabled}
+          onChange={this.handleInputChange}
+          placeholder="Password"
+        />
+        {signIn}
+        {error}
       </form>
     );
   }
@@ -148,6 +119,7 @@ SignInForm.propTypes = {
   onSubmit: React.PropTypes.func,
   user: React.PropTypes.object,
   router: React.PropTypes.object,
+  className: React.PropTypes.string,
 };
 
 SignInForm.contextTypes = {

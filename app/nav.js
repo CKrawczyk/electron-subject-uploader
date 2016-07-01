@@ -1,35 +1,71 @@
 import React from 'react';
 import { IndexLink } from 'react-router';
+import SignInForm from './sign-in-form';
+import auth from 'panoptes-client/lib/auth';
 
-export default class SideBar extends React.Component {
+export class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSignOut = this.handleSignOut.bind(this);
+  }
+
+  handleSignOut() {
+    auth.signOut().then(() => {
+      this.context.updateUser(null);
+    });
+  }
+
   render() {
+    let currentUser;
+    let signIn;
+    let signOut;
+    if (this.context.user) {
+      currentUser = (
+        <div className="header-grid__current-user">
+          Signed in as {this.context.user.login}
+        </div>
+      );
+      signOut = (
+        <button type="button" className="minor-button header-grid__sign-out" onClick={this.handleSignOut}>
+          Sign out
+        </button>
+      );
+    } else {
+      signIn = <SignInForm className="header-grid__user" />;
+    }
     return (
-      <div className="panoptes-main">
-        <div className="columns-container content-container">
-          <div>
-            <ul className="nav-list">
-              <li><IndexLink to="/" activeClassName="active" className="nav-list-item">
-                Home
-              </IndexLink></li>
-              <li><IndexLink to="/sign-in" activeClassName="active" className="nav-list-item">
-                User
-              </IndexLink></li>
-            </ul>
+      <div className="app">
+        <div className="app__header">
+          <div className="header-grid">
+            {currentUser}
+            {signOut}
+            {signIn}
+            <IndexLink to="/" className="header-grid__home">
+              Home
+            </IndexLink>
           </div>
+        </div>
+        <div className="app__sidebar">
+          <ul className="nav-list">
+            <li><IndexLink to="/" activeClassName="active" className="nav-list-item">
+              Home
+            </IndexLink></li>
+          </ul>
+        </div>
+        <div className="app__content">
           <hr />
-          <div className="column">
-            {this.props.children}
-          </div>
+          {this.props.children}
         </div>
       </div>
     );
   }
 }
 
-SideBar.propTypes = {
+Header.propTypes = {
   children: React.PropTypes.node,
 };
 
-SideBar.contextTypes = {
+Header.contextTypes = {
+  updateUser: React.PropTypes.func,
   user: React.PropTypes.object,
 };

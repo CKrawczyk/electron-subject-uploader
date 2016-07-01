@@ -1,5 +1,5 @@
 import React from 'react';
-import SideBar from './nav';
+import { Header } from './nav';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -25,10 +25,10 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <div className="app-main">
-        <SideBar>
+      <div className="wrapper">
+        <Header>
           {this.props.children}
-        </SideBar>
+        </Header>
       </div>
     );
   }

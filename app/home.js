@@ -10,20 +10,18 @@ export default class Home extends React.Component {
           Project List here
         </div>
       );
+    } else {
+      projectList = (
+        <div>
+          Please sign in to see your projects
+        </div>
+      );
     }
     return (
-      <div className="landing-page">
+      <div>
         <h3 className="landing-title">
           Zooniverse Subject Uploader
         </h3>
-
-        <div className="landing-actions">
-          <div className="landing-buttons">
-            <Link type="button" className="call-to-action standard-button landing-button" to="/sign-in">
-              Sign in/out
-            </Link>
-          </div>
-        </div>
         {projectList}
       </div>
     );

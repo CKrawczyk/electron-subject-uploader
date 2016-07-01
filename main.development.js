@@ -16,6 +16,9 @@ function createWindow() {
     show: false,
     width: 1024,
     height: 728,
+    webPreferences: {
+      blinkFeatures: 'CSSGridLayout',
+    },
   });
 
   mainWindow.loadURL(`file://${__dirname}/app/index.html`);

@@ -1,9 +1,67 @@
 @require "./common"
 @require "./typography"
-// @require "./landing-page"
 @require "./loading-indicator"
 @require "./forms"
 @require "./buttons"
 @require "./nav-list"
-@require "./layout"
-@require "./lab"
+
+body
+  margin: 0
+  
+.app
+  display: grid
+  grid-gap: 10px
+  grid-template-columns: 20% 40% 40%
+  grid-template-areas: "............  header  header" "sidebar  content  content"
+  background-color: #fff
+
+  &__sidebar
+    grid-area: sidebar
+
+  &__content
+    grid-area: content
+    display: flex
+    
+    > hr
+      border-width: 0 0 0 1px
+      height: auto
+      margin-bottom: 0
+      margin-top: 0
+
+    > :not(:last-child)
+      margin-right: 1.5vw
+    
+  &__header
+    grid-area: header
+
+.header-grid
+  display: grid
+  grid-gap: 10px
+  grid-template-columns: repeat(5, 20%)
+  margin-top: 15px
+  
+  &__user
+    grid-column: 1 / span 3
+
+  &__home
+    grid-column: 5
+
+  &__current-user
+    grid-column: 1
+
+  &__sign-out
+    grid-column: 2
+
+.sign-in-form
+  display: grid
+  grid-gap: 10px
+  grid-template-columns: 40% 40% 20%
+
+  &__username
+    grid-column: 1
+
+  &__password
+    grid-column: 2
+
+  &__submit
+    grid-column: 3
