@@ -6,11 +6,13 @@ export default class App extends React.Component {
     super(props);
     this.updateUser = this.updateUser.bind(this);
     this.updateProject = this.updateProject.bind(this);
+    this.updateSubjectSet = this.updateSubjectSet.bind(this);
     this.getChildContext = this.getChildContext.bind(this);
 
     this.state = {
       user: null,
       project: null,
+      subjectSet: null,
     };
   }
 
@@ -20,6 +22,8 @@ export default class App extends React.Component {
       updateUser: this.updateUser,
       project: this.state.project,
       updateProject: this.updateProject,
+      subjectSet: this.state.subjectSet,
+      updateSubjectSet: this.updateSubjectSet,
     };
   }
 
@@ -29,6 +33,10 @@ export default class App extends React.Component {
 
   updateProject(project) {
     this.setState({ project });
+  }
+
+  updateSubjectSet(subjectSet) {
+    this.setState({ subjectSet });
   }
 
   render() {
@@ -51,4 +59,6 @@ App.childContextTypes = {
   updateUser: React.PropTypes.func,
   project: React.PropTypes.object,
   updateProject: React.PropTypes.func,
+  subjectSet: React.PropTypes.object,
+  updateSubjectSet: React.PropTypes.func,
 };

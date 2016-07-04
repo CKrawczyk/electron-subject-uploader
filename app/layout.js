@@ -2,7 +2,7 @@ import React from 'react';
 import { IndexLink } from 'react-router';
 import SignInForm from './sign-in-form';
 import auth from 'panoptes-client/lib/auth';
-import { ProjectSidebar } from './project-sidebar';
+import ProjectSidebar from './project-sidebar';
 
 export default class Layout extends React.Component {
   constructor(props) {
@@ -14,11 +14,14 @@ export default class Layout extends React.Component {
   handleSignOut() {
     auth.signOut().then(() => {
       this.context.updateUser(null);
+      this.context.updateProject(null);
+      this.context.updateSubjectSet(null);
     });
   }
 
   handleHomeClick() {
     this.context.updateProject(null);
+    this.context.updateSubjectSet(null);
   }
 
   render() {
@@ -88,4 +91,5 @@ Layout.contextTypes = {
   updateUser: React.PropTypes.func,
   project: React.PropTypes.object,
   updateProject: React.PropTypes.func,
+  updateSubjectSet: React.PropTypes.func,
 };
