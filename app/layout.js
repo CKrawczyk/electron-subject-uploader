@@ -2,17 +2,23 @@ import React from 'react';
 import { IndexLink } from 'react-router';
 import SignInForm from './sign-in-form';
 import auth from 'panoptes-client/lib/auth';
+import { ProjectSidebar } from './project-sidebar';
 
-export class Header extends React.Component {
+export default class Layout extends React.Component {
   constructor(props) {
     super(props);
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleHomeClick = this.handleHomeClick.bind(this);
   }
 
   handleSignOut() {
     auth.signOut().then(() => {
       this.context.updateUser(null);
     });
+  }
+
+  handleHomeClick() {
+    this.context.updateProject(null);
   }
 
   render() {
@@ -33,6 +39,20 @@ export class Header extends React.Component {
     } else {
       signIn = <SignInForm className="header-grid__user" />;
     }
+    let sidebar;
+    if (this.context.project) {
+      sidebar = <ProjectSidebar />;
+    } else {
+      sidebar = (
+        <ul className="nav-list">
+          <li>
+            <div className="nav-list-header">
+              Please select a project
+            </div>
+          </li>
+        </ul>
+      );
+    }
     return (
       <div className="app">
         <div className="app__header">
@@ -40,32 +60,32 @@ export class Header extends React.Component {
             {currentUser}
             {signOut}
             {signIn}
-            <IndexLink to="/" className="header-grid__home">
+            <IndexLink to="/" className="header-grid__home" onClick={this.handleHomeClick}>
               Home
             </IndexLink>
           </div>
         </div>
-        <div className="app__sidebar">
-          <ul className="nav-list">
-            <li><IndexLink to="/" activeClassName="active" className="nav-list-item">
-              Home
-            </IndexLink></li>
-          </ul>
+        <div className="app__sidebar content-container">
+          {sidebar}
         </div>
         <div className="app__content">
           <hr />
-          {this.props.children}
+          <div className="content-container">
+            {this.props.children}
+          </div>
         </div>
       </div>
     );
   }
 }
 
-Header.propTypes = {
+Layout.propTypes = {
   children: React.PropTypes.node,
 };
 
-Header.contextTypes = {
-  updateUser: React.PropTypes.func,
+Layout.contextTypes = {
   user: React.PropTypes.object,
+  updateUser: React.PropTypes.func,
+  project: React.PropTypes.object,
+  updateProject: React.PropTypes.func,
 };

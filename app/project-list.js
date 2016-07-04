@@ -2,27 +2,42 @@ import React from 'react';
 import { Link, withRouter } from 'react-router';
 import apiClient from 'panoptes-client';
 
-export const ProjectLink = (props) => {
-  let avatar;
-  let owner;
-  if (props.avatar) {
-    avatar = <img className="lab-index-project-row__avatar" alt={props.project.display_name} src={props.avatar.src} />;
+export class ProjectLink extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleProjectChange = this.handleProjectChange.bind(this);
   }
-  if (props.owner) {
-    owner = <small>by {props.owner.display_name}</small>;
+
+  handleProjectChange() {
+    this.context.updateProject(this.props.project);
   }
-  return (
-    <div className="lab-index-project-row">
-      <Link to={`${props.project.id}`} className="lab-index-project-row__link lab-index-project-row__group lab-index-project-row__action">
-        {avatar}
-        <div className="lab-index-project-row__description">
-          <strong className="lab-index-project-row__name">{props.project.display_name}</strong>{' '}
-          {owner}
-        </div>
-      </Link>
-    </div>
-  );
-};
+
+  render() {
+    let avatar;
+    let owner;
+    if (this.props.avatar) {
+      avatar = <img className="lab-index-project-row__avatar" alt={this.props.project.display_name} src={this.props.avatar.src} />;
+    }
+    if (this.props.owner) {
+      owner = <small>by {this.props.owner.display_name}</small>;
+    }
+    return (
+      <div className="lab-index-project-row">
+        <Link
+          to={`${this.props.project.id}`}
+          className="lab-index-project-row__link lab-index-project-row__group lab-index-project-row__action"
+          onClick={this.handleProjectChange}
+        >
+          {avatar}
+          <div className="lab-index-project-row__description">
+            <strong className="lab-index-project-row__name">{this.props.project.display_name}</strong>{' '}
+            {owner}
+          </div>
+        </Link>
+      </div>
+    );
+  }
+}
 
 ProjectLink.defaultProps = {
   project: {},
@@ -34,6 +49,10 @@ ProjectLink.propTypes = {
   project: React.PropTypes.object,
   avatar: React.PropTypes.object,
   owner: React.PropTypes.object,
+};
+
+ProjectLink.contextTypes = {
+  updateProject: React.PropTypes.func,
 };
 
 export class ProjectList extends React.Component {
@@ -163,7 +182,7 @@ export class ProjectList extends React.Component {
       );
     }
     return (
-      <div className="content-container">
+      <div>
         <header>
           <p>
             <strong className="form-label">{this.props.title}</strong>

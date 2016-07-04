@@ -1,14 +1,16 @@
 import React from 'react';
-import { Header } from './nav';
+import Layout from './layout';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
+    this.updateProject = this.updateProject.bind(this);
     this.getChildContext = this.getChildContext.bind(this);
 
     this.state = {
       user: null,
+      project: null,
     };
   }
 
@@ -16,6 +18,8 @@ export default class App extends React.Component {
     return {
       user: this.state.user,
       updateUser: this.updateUser,
+      project: this.state.project,
+      updateProject: this.updateProject,
     };
   }
 
@@ -23,12 +27,16 @@ export default class App extends React.Component {
     this.setState({ user });
   }
 
+  updateProject(project) {
+    this.setState({ project });
+  }
+
   render() {
     return (
       <div className="wrapper">
-        <Header>
+        <Layout>
           {this.props.children}
-        </Header>
+        </Layout>
       </div>
     );
   }
@@ -41,4 +49,6 @@ App.propTypes = {
 App.childContextTypes = {
   user: React.PropTypes.object,
   updateUser: React.PropTypes.func,
+  project: React.PropTypes.object,
+  updateProject: React.PropTypes.func,
 };

@@ -1,10 +1,15 @@
 import React from 'react';
 
-export const Project = (props) => {
-  console.log(props);
-  return (
-    <div>
-      Project info here!
-    </div>
-  );
+export default class Project extends React.Component {
+  render() {
+    return (
+      <div>
+        Project info for #{this.context.project.id}
+      </div>
+    );
+  }
+}
+
+Project.contextTypes = {
+  project: React.PropTypes.object,
 };
