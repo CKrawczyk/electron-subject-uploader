@@ -1,15 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router';
+import ProjectListDisplay from './project-list';
 
 export default class Home extends React.Component {
   render() {
     let projectList;
     if (this.context.user) {
-      projectList = (
-        <div>
-          Project List here
-        </div>
-      );
+      projectList = <ProjectListDisplay />;
     } else {
       projectList = (
         <div>
