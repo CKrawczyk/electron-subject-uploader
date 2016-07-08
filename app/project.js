@@ -1,10 +1,11 @@
 import React from 'react';
 
-export class Project extends React.Component {
+export default class Project extends React.Component {
   render() {
     return (
       <div>
         Project info for #{this.context.project.id}
+        <hr />
         {this.props.children}
       </div>
     );
@@ -17,18 +18,4 @@ Project.propTypes = {
 
 Project.contextTypes = {
   project: React.PropTypes.object,
-};
-
-export class SubjectSet extends React.Component {
-  render() {
-    return (
-      <div>
-        Subject set #{this.context.subjectSet.id}
-      </div>
-    );
-  }
-}
-
-SubjectSet.contextTypes = {
-  subjectSet: React.PropTypes.object,
 };

@@ -15,7 +15,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1024,
-    height: 728,
+    height: 750,
     webPreferences: {
       blinkFeatures: 'CSSGridLayout',
     },

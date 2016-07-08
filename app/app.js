@@ -1,13 +1,17 @@
 import React from 'react';
 import Layout from './layout';
+import auth from 'panoptes-client/lib/auth';
+import { withRouter } from 'react-router';
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.updateUser = this.updateUser.bind(this);
     this.updateProject = this.updateProject.bind(this);
     this.updateSubjectSet = this.updateSubjectSet.bind(this);
     this.getChildContext = this.getChildContext.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleHomeClick = this.handleHomeClick.bind(this);
 
     this.state = {
       user: null,
@@ -39,10 +43,27 @@ export default class App extends React.Component {
     this.setState({ subjectSet });
   }
 
+  handleSignOut() {
+    this.props.router.push('/');
+    this.setState({
+      user: null,
+      project: null,
+      subjectSet: null,
+    });
+    auth.signOut();
+  }
+
+  handleHomeClick() {
+    this.setState({
+      project: null,
+      subjectSet: null,
+    });
+  }
+
   render() {
     return (
       <div className="wrapper">
-        <Layout>
+        <Layout handleSignOut={this.handleSignOut} handleHomeClick={this.handleHomeClick}>
           {this.props.children}
         </Layout>
       </div>
@@ -52,6 +73,7 @@ export default class App extends React.Component {
 
 App.propTypes = {
   children: React.PropTypes.node,
+  router: React.PropTypes.object,
 };
 
 App.childContextTypes = {
@@ -62,3 +84,5 @@ App.childContextTypes = {
   subjectSet: React.PropTypes.object,
   updateSubjectSet: React.PropTypes.func,
 };
+
+export default withRouter(App);

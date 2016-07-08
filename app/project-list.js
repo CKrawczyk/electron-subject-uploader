@@ -114,16 +114,24 @@ export class ProjectList extends React.Component {
             project.get('avatar')
               .catch(() => {})
               .then((avatar) => {
-                this.state.avatars[project.id] = avatar;
-                this.forceUpdate();
+                this.setState({
+                  avatars: {
+                    ...this.state.avatars,
+                    [project.id]: avatar,
+                  },
+                });
               });
           }
           if (this.props.withOwners) {
             project.get('owner')
               .catch(() => null)
               .then((owner) => {
-                this.state.owners[project.id] = owner;
-                this.forceUpdate();
+                this.setState({
+                  owners: {
+                    ...this.state.owners,
+                    [project.id]: owner,
+                  },
+                });
               });
           }
         });

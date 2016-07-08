@@ -1,29 +1,9 @@
 import React from 'react';
 import { IndexLink } from 'react-router';
 import SignInForm from './sign-in-form';
-import auth from 'panoptes-client/lib/auth';
 import ProjectSidebar from './project-sidebar';
 
 export default class Layout extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSignOut = this.handleSignOut.bind(this);
-    this.handleHomeClick = this.handleHomeClick.bind(this);
-  }
-
-  handleSignOut() {
-    auth.signOut().then(() => {
-      this.context.updateUser(null);
-      this.context.updateProject(null);
-      this.context.updateSubjectSet(null);
-    });
-  }
-
-  handleHomeClick() {
-    this.context.updateProject(null);
-    this.context.updateSubjectSet(null);
-  }
-
   render() {
     let currentUser;
     let signIn;
@@ -35,7 +15,7 @@ export default class Layout extends React.Component {
         </div>
       );
       signOut = (
-        <button type="button" className="minor-button header-grid__sign-out" onClick={this.handleSignOut}>
+        <button type="button" className="minor-button header-grid__sign-out" onClick={this.props.handleSignOut}>
           Sign out
         </button>
       );
@@ -63,7 +43,7 @@ export default class Layout extends React.Component {
             {currentUser}
             {signOut}
             {signIn}
-            <IndexLink to="/" className="header-grid__home" onClick={this.handleHomeClick}>
+            <IndexLink to="/" className="header-grid__home" onClick={this.props.handleHomeClick}>
               Home
             </IndexLink>
           </div>
@@ -84,12 +64,12 @@ export default class Layout extends React.Component {
 
 Layout.propTypes = {
   children: React.PropTypes.node,
+  router: React.PropTypes.object,
+  handleSignOut: React.PropTypes.func,
+  handleHomeClick: React.PropTypes.func,
 };
 
 Layout.contextTypes = {
   user: React.PropTypes.object,
-  updateUser: React.PropTypes.func,
   project: React.PropTypes.object,
-  updateProject: React.PropTypes.func,
-  updateSubjectSet: React.PropTypes.func,
 };
